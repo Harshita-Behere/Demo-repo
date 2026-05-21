@@ -289,5 +289,142 @@ Current status:
 * No final models implemented yet
 * Ready to start MVP implementation now
 * Goal is to keep MVP extremely simple first
+_____________________________________________________
+
+commands for testing:
+* python manage.py runscan
+* python manage.py shell
+
+to view:
+from devices.models import Device
+Device.objects.all()
+
+from alerts.models import Alert
+Alert.objects.all()
+
+from scans.models import Scan
+Scan.objects.all()
+
+to delete :
+from devices.models import Device
+from alerts.models import Alert
+
+Device.objects.all().delete()
+Alert.objects.all().delete()
+
+mvp update prompt:-
+We are building a Django-based Network Monitoring System MVP for an offline/air-gapped intranet environment.
+
+Current tech stack:
+
+* Django
+* PostgreSQL
+* Service-layer architecture
+* Fake scan data for testing (real Nmap integration postponed for now)
+
+Goal of MVP:
+
+* Simulate network scans
+* Store devices
+* Detect changes
+* Generate alerts
+* Validate monitoring logic before integrating real Nmap
+
+What we have completed till now:
+
+1. Django project setup completed
+
+* PostgreSQL connected
+* Apps created and registered:
+
+  * devices
+  * scans
+  * scanner
+  * alerts
+  * dashboard
+  * accounts
+
+2. Core models created
+
+* Device model
+* Scan model
+* Alert model
+
+3. Device model stores:
+
+* MAC address
+* IP address
+* hostname
+* vendor
+* operating system
+* online status
+* authorization status
+* last seen timestamp
+
+4. Alert model stores:
+
+* alert type
+* linked device
+* description
+* timestamp
+
+5. Scan model stores:
+
+* subnet scanned
+* total devices found
+* scan timestamp
+
+6. Created fake scanner service
+
+* Returns static Python list of fake devices
+* Used instead of real Nmap for MVP testing
+
+7. Created scan_processor service
+   Current logic:
+
+* Detect new devices
+* Detect IP changes
+* Detect OS changes
+* Detect missing/offline devices
+* Update current device state
+* Generate alerts
+
+8. Implemented baseline logic
+
+* First scan acts as baseline
+* No alerts generated on first scan
+* Alerts only generated from future changes
+
+9. Created Django management command:
+
+* python manage.py runscan
+
+Flow:
+
+* fake scan runs
+* scan metadata stored
+* scan processed
+* devices updated
+* alerts generated
+
+10. Django admin configured
+
+* Device model visible
+* Alert model visible
+* Scan model visible
+
+11. Testing completed successfully
+    Verified:
+
+* baseline scans work
+* devices are stored
+* alerts are generated correctly
+* duplicate devices are not recreated
+* online/offline logic works
+
+Current project status:
+
+* Core monitoring logic MVP is working successfully using fake scan data
+* Real Nmap integration intentionally postponed until logic validation is fully complete
 
 
