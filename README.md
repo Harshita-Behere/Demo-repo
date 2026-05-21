@@ -206,5 +206,88 @@ Scan → Parse → Compare → Update DB → Create Alerts
 
 Give output in clean pseudocode format suitable for implementing in Python/Django service layer.
 
+MVP ----------------------/////////////
+
+PROJECT SUMMARY
+
+We are building a Django-based Network Monitoring System for a completely offline/air-gapped intranet environment. The system periodically scans internal networks using Nmap, detects connected devices, tracks changes between scans, and generates security/network alerts. The main goal is to monitor devices inside a private organization network without requiring internet access.
+
+What we have completed till now:
+
+* Django project is created
+* PostgreSQL is connected and working
+* GitHub repository is initialized
+* Apps created:
+
+  * accounts
+  * devices
+  * scans
+  * scanner
+  * alerts
+  * dashboard
+
+Project architecture:
+
+* Using service-layer design
+* Business logic is kept inside services/
+* Not placing logic inside views/models
+
+Current service structure:
+
+* scanner/services/
+
+  * nmap_runner.py
+  * xml_parser.py
+  * scan_processor.py
+* alerts/services/
+
+  * alert_service.py
+
+System purpose:
+
+* Run Nmap scans on internal subnets
+* Detect devices on the network
+* Compare scans with existing device records
+* Detect changes
+* Generate alerts
+
+Planned core database tables:
+
+1. Device
+2. Scan
+3. DeviceHistory
+4. Alert
+
+Important design decisions:
+
+* MAC address is the primary identity of a device
+* Device table stores latest/current state only
+* DeviceHistory stores change logs
+* Alerts are generated from comparison logic
+* First scan acts as baseline
+
+Current scan flow:
+
+1. Nmap scan runs
+2. Output parsed into structured Python objects
+3. scan_processor compares results with DB
+4. Device changes detected
+5. Alerts generated
+6. Dashboard will read from database
+
+Planned change detection:
+
+* New device detected
+* IP change for same MAC
+* Missing device
+* MAC/IP spoofing
+* Unauthorized device reappears
+* OS change detected
+
+Current status:
+
+* No final models implemented yet
+* Ready to start MVP implementation now
+* Goal is to keep MVP extremely simple first
 
 
