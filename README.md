@@ -427,4 +427,62 @@ Current project status:
 * Core monitoring logic MVP is working successfully using fake scan data
 * Real Nmap integration intentionally postponed until logic validation is fully complete
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+22/5/26
+
+You are analyzing a Django-based network monitoring system project.
+
+Project name: network-monitoring-system
+Language: Python
+Framework: Django 5.2.14
+Database: PostgreSQL configured in `config/settings.py` (`network_monitor` on localhost:5432)
+Dependencies in `requirements.txt`:
+  - asgiref==3.11.1
+  - Django==5.2.14
+  - psycopg2-binary==2.9.12
+  - python-nmap==0.7.1
+  - sqlparse==0.5.5
+  - typing_extensions==4.15.0
+  - tzdata==2026.2
+
+Root files:
+  - `manage.py` : Django CLI entrypoint
+  - `README.md` : project notes
+  - `requirements.txt` : dependency list
+  - `db.sqlite3` : local SQLite file present (project uses PostgreSQL settings)
+  - `config/` : Django project config and routing
+
+Key config:
+  - `config/settings.py`
+    - INSTALLED_APPS: accounts, devices, alerts, scans, scanner, dashboard
+    - DEBUG = True
+    - TIME_ZONE = Asia/Kolkata
+    - DATABASES uses PostgreSQL
+  - `config/urls.py`
+  - `config/wsgi.py`
+  - `config/asgi.py`
+
+Django apps and responsibilities:
+  - `accounts/` : user/account models, admin, views
+  - `devices/` : device inventory models, admin
+  - `alerts/` : alert models, views, alerting logic
+  - `scans/` : scan records models and views
+  - `scanner/` : scanning engine
+      - `management/commands/runscan.py` : execute scans
+      - `services/nmap_runner.py` : run nmap scans
+      - `services/xml_parser.py` : parse nmap XML output
+      - `services/normalizer.py` : normalize scan data
+      - `services/scan_processor.py` : process parsed scans into database records
+  - `dashboard/` : user-facing UI and templates
+      - `dashboard/templates/dashboard/base.html`
+      - `dashboard/templates/dashboard/index.html`
+      - `dashboard/templates/dashboard/devices.html`
+      - `dashboard/templates/dashboard/scans.html`
+      - `dashboard/templates/dashboard/alerts.html`
+
+Project purpose:
+  - Perform network scanning with nmap
+  - Parse and normalize scan results
+  - Store devices, scan results, and alerts in a Django database
+  - Provide a dashboard UI for monitoring network state
